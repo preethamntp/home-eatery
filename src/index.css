@@ -232,9 +232,28 @@ input {
   margin: 1rem;
 }
 
-.close-modal{
+.close-modal {
   position: absolute;
   right: 1rem;
-  top:2.5rem;
+  top: 2.5rem;
   z-index: 1000;
+}
+
+.success-message {
+  color: green;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.order-details li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  width: 40rem;
 }

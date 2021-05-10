@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import formatCurrency from "../util";
 import Fade from "react-reveal/Fade";
+import Zoom from "react-reveal/Zoom";
+import Modal from "react-modal";
 
 export default class Cart extends Component {
   constructor(props) {
@@ -9,7 +11,8 @@ export default class Cart extends Component {
       name: "",
       email: "",
       address: "",
-      showCheckout: false
+      showCheckout: false,
+      showOrder: null
     };
   }
 
@@ -25,7 +28,25 @@ export default class Cart extends Component {
       address: this.state.address,
       cartItems: this.props.cartItems
     };
-    this.props.createOrder(order);
+    // this.props.createOrder(order);
+
+    this.setState({ showOrder: order });
+  };
+
+  openModal = e => {
+    e.preventDefault();
+
+    const order = {
+      name: this.state.name,
+      email: this.state.email,
+      address: this.state.address,
+      cartItems: this.props.cartItems
+    };
+    this.setState({ showOrder: order });
+  };
+
+  closeModal = () => {
+    this.setState({ showOrder: null });
   };
 
   render() {
@@ -115,7 +136,11 @@ export default class Cart extends Component {
                         />
                       </li>
                       <li>
-                        <button className="button primary" type="submit">
+                        <button
+                          className="button primary"
+                          type="submit"
+                          onClick={() => this.handleCheckout}
+                        >
                           Checkout
                         </button>
                       </li>
@@ -125,6 +150,57 @@ export default class Cart extends Component {
               </div>
             )}
           </div>
+        )}
+
+        {this.state.showOrder && (
+          <Modal isOpen={true} onRequestClose={this.closeModal}>
+            <Zoom>
+              <button className="close-modal" onClick={this.closeModal}>
+                X
+              </button>
+              <div className="order-details">
+                <h3 className="success-message">
+                  Your order has been placed.{" "}
+                </h3>
+                <h2>Order mNdkrpySZ</h2>
+                <ul>
+                  <li>
+                    <div>Name:</div>
+                    <div>{this.state.name}</div>
+                  </li>
+                  <li>
+                    <div>Email:</div>
+                    <div>{this.state.email}</div>
+                  </li>
+                  <li>
+                    <div>Address:</div>
+                    <div>{this.state.address}</div>
+                  </li>
+                  <li>
+                    <div>Date:</div>
+                    <div>{JSON.stringify(new Date())}</div>
+                  </li>
+                  <li>
+                    <div>Total:</div>
+                    <div>
+                      {" "}
+                      {formatCurrency(
+                        cartItems.reduce((a, c) => a + c.price * c.count, 0)
+                      )}{" "}
+                    </div>
+                  </li>
+                  <li>
+                    <div>Cart Items:</div>
+                    <div>
+                      {cartItems.map(item => (
+                        <div key={item._id}> {item.title} </div>
+                      ))}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Zoom>
+          </Modal>
         )}
       </div>
     );
