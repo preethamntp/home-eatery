@@ -76,7 +76,7 @@ class App extends React.Component {
       this.setState({
         size: event.target.value,
         products: data.products.filter(
-          product => product.availableSizes.indexOf(event.target.value) >= 0
+          product => product.availableDishes.indexOf(event.target.value) >= 0
         )
       });
     }
